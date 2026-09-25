@@ -9,6 +9,10 @@ const LossEventSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    reportedBy: {
+        type: String,
+        required: false,
+    },
     cost: {
         type: String,
         required: true,
