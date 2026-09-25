@@ -15,7 +15,7 @@ const LossEventSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
-        required: true,
+        required: false,
     },
     date: {
         type: Date,
@@ -23,11 +23,11 @@ const LossEventSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        require: true,
+        require: false,
     },
     cloudinaryId: {
         type: String,
-        require: true,
+        require: false,
     },
     description: {
         type: String,
