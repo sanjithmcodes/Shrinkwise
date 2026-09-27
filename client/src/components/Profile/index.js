@@ -16,7 +16,13 @@ const Profile = () => {
 
     //form states
     const [title, setTitle] = useState('')
+    const [type, setType] = useState('')
     const [caption, setCaption] = useState('')
+    const [category, setCategory] = useState('')
+    const [cost, setCost] = useState('')
+    const [quantity, setQuantity] = useState('')
+    const [date, setDate] = useState('')
+    const [description, setDescription] = useState('')
     const [selectedFile, setSelectedFile] = useState(undefined)
     
     useEffect(() => {
@@ -45,6 +51,25 @@ const Profile = () => {
 
     function handleTitle(e){
         setTitle(e.target.value)
+    }
+    function handleQuantity(e){
+        setQuantity(e.target.value)
+    }
+    function handleCost(e) {
+        setCost(e.target.value)
+    }
+    function handleDate(e) {
+        setCost(e.target.value)
+    }
+    function handleType(e){
+        setType(e.target.value)
+    }
+    function handleCategory(e){
+        setCategory(e.target.value)
+    }
+
+    function handleDescription(e){
+        setDescription(e.target.value)
     }
 
     function handleCaption(e){
@@ -133,6 +158,61 @@ const Profile = () => {
                                 <button type="submit" className="btn btn-primary" value="Upload">Submit</button>
                             </form>
                         </div>
+                        
+                        <div className="mt-5">
+                            <h2>Add a Loss Event</h2>
+                            <form encType="multipart/form-data" onSubmit={handleSubmit}>
+                                <div className="mb-3">
+                                    <label htmlFor="type" className="form-label">Type</label>
+                                    <select required onChange={handleType} type="text" className="form-control" id="type" name="type">
+                                        <option hidden disabled selected value> -- select an option -- </option>
+                                        <option value='waste'>Waste/Spoilage</option>
+                                        <option value='discrepancy'>Till discrepancy</option>
+                                        <option value='unaccounted'>Unaccounted Stock</option>
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="category" className="form-label">Category</label>
+                                    <select required onChange={handleCategory} type="text" className="form-control" id="category" name="category">
+                                        <option hidden disabled selected value> -- select an option -- </option>
+                                        <option value='snacks'>Snacks</option>
+                                        <option value='confectionary'>Confectionary</option>
+                                        <option value='beverages'>Beverages</option>
+                                        <option value='dairy'>Dairy</option>
+                                        <option value='frozen foods'>Frozen Foods</option>
+                                        <option value='grocery'>Grocery/Packaged Foods</option>
+                                        <option value='tobacco'>Tobacco</option>
+                                        <option value='alcohol'>Alcohol</option>
+                                        <option value='health & beauty'>Health & Beauty</option>
+                                        <option value='household items'>Household Items</option>
+                                        <option value='automotive'>Automotive</option>
+                                        <option value='other'>Other</option>
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="cost" className="form-label">Cost</label>
+                                    <input onChange={handleCost} required type="number" step=".01" className="form-control" id="cost" name="cost" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="quantity" className="form-label">Quantity</label>
+                                    <input onChange={handleQuantity} type="number" className="form-control" id="quantity" name="quantity" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="date" className="form-label">Date</label>
+                                    <input onChange={handleDate} required type="date" className="form-control" id="date" name="date" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="description" className="form-label">Description</label>
+                                    <textarea onChange={handleDescription} className="form-control" id="description" name="description"></textarea>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="imgUpload" className="form-label">Image</label>
+                                    <input type="file" className="form-control" id="imageUpload" name="file" onChange={handleFile} accept="image/*"></input>
+                                </div>
+                                <button type="submit" className="btn btn-primary" value="Upload">Submit</button>
+                            </form>
+                        </div>
+                    
                     </div>
                     <div className="col-6">
                         <ul className="row list-unstyled">

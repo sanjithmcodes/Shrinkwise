@@ -9,12 +9,8 @@ const LossEventSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    reportedBy: {
-        type: String,
-        required: false,
-    },
     cost: {
-        type: String,
+        type: Number,
         required: true,
     },
     quantity: {
@@ -35,7 +31,7 @@ const LossEventSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true,
+        required: false,
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
