@@ -15,9 +15,7 @@ const Profile = () => {
     const [email, setEmail] = useState('')
 
     //form states
-    const [title, setTitle] = useState('')
     const [type, setType] = useState('')
-    const [caption, setCaption] = useState('')
     const [category, setCategory] = useState('')
     const [cost, setCost] = useState('')
     const [quantity, setQuantity] = useState('')
@@ -49,9 +47,7 @@ const Profile = () => {
         setSelectedFile(e.target.files[0])
     }
 
-    function handleTitle(e){
-        setTitle(e.target.value)
-    }
+
     function handleQuantity(e){
         setQuantity(e.target.value)
     }
@@ -59,7 +55,7 @@ const Profile = () => {
         setCost(e.target.value)
     }
     function handleDate(e) {
-        setCost(e.target.value)
+        setDate(e.target.value)
     }
     function handleType(e){
         setType(e.target.value)
@@ -72,32 +68,42 @@ const Profile = () => {
         setDescription(e.target.value)
     }
 
-    function handleCaption(e){
-        setCaption(e.target.value)
-    }
 
     async function handleSubmit(e){
         
         e.preventDefault()
         // action="/post/createPost" encType="multipart/form-data" method="POST"
         let temp = []
-        if(title === '' || caption === '' || selectedFile === undefined) {
+        if(type === '' || category === '' || cost === '' || date === '') {
             temp = [...temp, 'Please fill in all fields']
         }else {
             setSubmitted(true);
             setErrors([]);
 
             const formData = new FormData()
-            formData.append("title", title)
-            formData.append("caption", caption)
-            formData.append("file", selectedFile)
+            formData.append("type", type)
+            formData.append("category", category)
+            formData.append("cost", cost)
+            formData.append("date", date)
+
+            if (description) {
+                formData.append("description", description)
+            }
+            if (quantity) {
+                formData.append("quantity", quantity)
+            }
+            if (selectedFile) {
+                formData.append("file", selectedFile)
+            }
 
             const options = {
                 method: 'POST',
                 body: formData
             }
+            const formObject = Object.fromEntries(formData.entries())
+            console.log(formObject)
 
-            await fetch('/post/createPost', options)
+            await fetch('/lossEvent/createLossEvent', options)
                 .then(res => {
                     window.location.reload()
                     // fetch('/profile')
@@ -137,26 +143,8 @@ const Profile = () => {
                         </div>
                         <div className="mt-5">
                             {errors.map((err,i) => {
-                                return <span key="{i}" className="alert alert-danger">{err}</span>
+                                return <span key={i} className="alert alert-danger">{err}</span>
                             })}
-                        </div>
-                        <div className="mt-5">
-                            <h2>Add a post</h2>
-                            <form encType="multipart/form-data" onSubmit={handleSubmit}>
-                                <div className="mb-3">
-                                    <label htmlFor="title" className="form-label">Title</label>
-                                    <input onChange={handleTitle} type="text" className="form-control" id="title" name="title" />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="caption" className="form-label">Caption</label>
-                                    <textarea onChange={handleCaption} className="form-control" id="caption" name="caption"></textarea>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="imgUpload" className="form-label">Image</label>
-                                    <input type="file" className="form-control" id="imageUpload" name="file" onChange={handleFile} accept="image/*"></input>
-                                </div>
-                                <button type="submit" className="btn btn-primary" value="Upload">Submit</button>
-                            </form>
                         </div>
                         
                         <div className="mt-5">
@@ -164,8 +152,8 @@ const Profile = () => {
                             <form encType="multipart/form-data" onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="type" className="form-label">Type</label>
-                                    <select required onChange={handleType} type="text" className="form-control" id="type" name="type">
-                                        <option hidden disabled selected value> -- select an option -- </option>
+                                    <select required defaultValue='' onChange={handleType} type="text" className="form-control" id="type" name="type">
+                                        <option value='' disabled> -- select an option -- </option>
                                         <option value='waste'>Waste/Spoilage</option>
                                         <option value='discrepancy'>Till discrepancy</option>
                                         <option value='unaccounted'>Unaccounted Stock</option>
@@ -173,8 +161,8 @@ const Profile = () => {
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="category" className="form-label">Category</label>
-                                    <select required onChange={handleCategory} type="text" className="form-control" id="category" name="category">
-                                        <option hidden disabled selected value> -- select an option -- </option>
+                                    <select required defaultValue='' onChange={handleCategory} type="text" className="form-control" id="category" name="category">
+                                        <option disabled value=''> -- select an option -- </option>
                                         <option value='snacks'>Snacks</option>
                                         <option value='confectionary'>Confectionary</option>
                                         <option value='beverages'>Beverages</option>
