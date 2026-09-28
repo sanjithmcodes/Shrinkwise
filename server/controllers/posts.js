@@ -15,7 +15,7 @@ module.exports = {
     },
     getFeed: async (req, res) => {
         try {
-            const posts = await Post.find().sort({ createdAt: "desc" }).lean();
+            const posts = await LossEvent.find({ user: req.user.id }).sort({ createdAt: "desc" }).lean();
             res.send({posts: posts})
             // res.render("feed.ejs", { posts: posts });
         } catch (err) {
@@ -24,7 +24,7 @@ module.exports = {
     },
     getPost: async (req, res) => {
         try {
-            const post = await Post.findById(ObjectId(req.params.id));
+            const post = await LossEvent.findById(ObjectId(req.params.id));
             res.send({user: req.user.id, post: post})
             // res.render("post.ejs", { post: post, user: req.user });
         } catch (err) {
@@ -52,13 +52,26 @@ module.exports = {
     },
     likePost: async (req, res) => {
         try {
-            await Post.findOneAndUpdate(
+            await LossEvent.findOneAndUpdate(
                 { _id: ObjectId(req.params.id) },
                 {
-                    $inc: { likes: 1 },
+                    favourited: true
                 }
             );
-            console.log("Likes +1");
+            console.log("Favourited");
+        } catch (err) {
+            console.log(err);
+        }
+    },
+    unlikePost: async (req, res) => {
+        try {
+            await LossEvent.findOneAndUpdate(
+                { _id: ObjectId(req.params.id) },
+                {
+                    favourited: false
+                }
+            );
+            console.log("Unfavourited");
         } catch (err) {
             console.log(err);
         }
@@ -66,14 +79,17 @@ module.exports = {
     deletePost: async (req, res) => {
         try {
             // Find post by id
-            let post = await Post.findById({ _id: req.params.id });
+            let post = await LossEvent.findById({ _id: req.params.id });
             // Delete image from cloudinary
-            await cloudinary.uploader.destroy(post.cloudinaryId);
+            if (post.cloudinaryId) {
+                await cloudinary.uploader.destroy(post.cloudinaryId);
+            }
             // Delete post from db
-            await Post.remove({ _id: req.params.id });
+            await LossEvent.remove({ _id: req.params.id });
             console.log("Deleted Post");
             res.redirect("/profile");
         } catch (err) {
+            console.log(err)
             res.redirect("/profile");
         }
     },

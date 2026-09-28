@@ -6,7 +6,7 @@ export default function PostPage() {
     //post state
     const [post, setPost] = useState({})
 
-    const [isLiked, setIsLiked] = useState(false)
+    const [isFavourited, setIsFavourited] = useState(false)
 
     //requesting-user state
     const [user, setUser] = useState('')
@@ -23,39 +23,48 @@ export default function PostPage() {
         return
     }, [])
 
-    async function handleLike(e){
+    async function handleFavourited(e){
         e.preventDefault()
-        if(!isLiked){
+        if(!isFavourited){
             await fetch(`/post/likePost/${id}?_method=PUT`)
                 .catch(err => console.error(err))
-            setIsLiked(true);
+            setIsFavourited(true);
+        } else {
+            await fetch(`/post/unlikePost/${id}?_method=PUT`)
+                .catch(err => console.error(err))
+            setIsFavourited(false);
+
         }
     }
 
     const navigate = useNavigate()
     async function handleDelete(e){
         e.preventDefault()
-        if(user === post.user){
+        try{
             await fetch(`/post/deletePost/${id}?_method=DELETE`, {
-                'method': "POST",
+            'method': "POST",
             })
             navigate('/profile')
+            console.log('Loss event deleted')
         }
+        catch(err) {
+            console.log(err)
+        }
+        
     }
 
     return (
         <div class="container">
             <div class="row justify-content-center mt-5">
                 <div class="col-6">
-                    <h2>{post.title}</h2>
+                    <h2>£{post.cost}</h2>
                     <img class="img-fluid" src={post.image} />
                     <div class="row justify-content-between">
                         <form
                             class="col-1"
                         >
-                            <button class="btn btn-primary fa fa-heart" style={isLiked ? {color: '#ff3e3e'} : {color: '#FFFFFF'}} onClick={handleLike}></button>
+                            <button class="btn btn-primary fa fa-heart" style={isFavourited ? {color: '#ff3e3e'} : {color: '#FFFFFF'}} onClick={handleFavourited}></button>
                         </form>
-                        <h3 class="col-3">Likes: {post.likes}</h3>
                         {user === post.user ?
                             (
                             <form
@@ -75,7 +84,7 @@ export default function PostPage() {
                 </div>
                             {/* <DeletePost userId={user} postUser={post.user} postId={post.id} /> */}
                 <div class="col-3 mt-5">
-                    <p>{post.caption}</p>
+                    <p>{post.description}</p>
                 </div>
                 <div class="col-6 mt-5">
                     <a class="btn btn-primary mx-3" href="/profile">Return to Profile</a>

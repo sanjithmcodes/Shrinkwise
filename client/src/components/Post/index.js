@@ -1,14 +1,11 @@
 import React from 'react'
 
 const Post = (props) => {
-    let image
-    if (!props.image) {
-        image = 'https://static.thenounproject.com/png/1077596-200.png'
-    }
+ 
     return (
         <li className="col-6 justify-content-between mt-5">
             <a href={"/post/"+ props.ID}>
-                <img className="img-fluid" src={props.image || image}></img>
+                <img className="img-fluid" src={props.image}></img>
             </a>
         </li>
     )

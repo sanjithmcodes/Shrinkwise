@@ -38,6 +38,7 @@ module.exports = {
                 date: req.body.date,
                 favourited: false,
                 user: req.user.id,
+                image: 'https://static.thenounproject.com/png/1077596-200.png',
                 cost: req.body.cost,
                 quantity: req.body.quantity,
             };
@@ -64,7 +65,7 @@ module.exports = {
                     favourited: true
                 }
             );
-            console.log("Likes +1");
+            console.log("Favourited");
         } catch (err) {
             console.log(err);
         }
