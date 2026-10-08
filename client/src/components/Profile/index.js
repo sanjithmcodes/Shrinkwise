@@ -178,7 +178,7 @@ const Profile = () => {
                                     </select>
                                 </div>
                                 <div className="mb-3">
-                                    <label htmlFor="cost" className="form-label">Cost</label>
+                                    <label htmlFor="cost" className="form-label">Cost per unit</label>
                                     <input onChange={handleCost} required type="number" step=".01" className="form-control" id="cost" name="cost" />
                                 </div>
                                 <div className="mb-3">

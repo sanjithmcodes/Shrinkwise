@@ -63,7 +63,6 @@ export default function PostPage() {
                         <form
                             class="col-1"
                         >
-                            <button class="btn btn-primary fa fa-heart" style={isFavourited ? {color: '#ff3e3e'} : {color: '#FFFFFF'}} onClick={handleFavourited}></button>
                         </form>
                         {user === post.user ?
                             (

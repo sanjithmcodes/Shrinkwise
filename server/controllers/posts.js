@@ -50,32 +50,6 @@ module.exports = {
             console.log(err);
         }
     },
-    likePost: async (req, res) => {
-        try {
-            await LossEvent.findOneAndUpdate(
-                { _id: ObjectId(req.params.id) },
-                {
-                    favourited: true
-                }
-            );
-            console.log("Favourited");
-        } catch (err) {
-            console.log(err);
-        }
-    },
-    unlikePost: async (req, res) => {
-        try {
-            await LossEvent.findOneAndUpdate(
-                { _id: ObjectId(req.params.id) },
-                {
-                    favourited: false
-                }
-            );
-            console.log("Unfavourited");
-        } catch (err) {
-            console.log(err);
-        }
-    },
     deletePost: async (req, res) => {
         try {
             // Find post by id
