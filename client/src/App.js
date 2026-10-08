@@ -1,12 +1,12 @@
 import React from "react"
-import Home from './components/Home'
+import Home from './pages/Home'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Login from './components/Login'
-import Signup from './components/Signup'
-import Profile from './components/Profile'
-import Feed from './components/Feed'
-import PostPage from './components/PostPage'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import Profile from './pages/Profile'
+import Feed from './pages/Feed'
+import PostPage from './pages/PostPage'
 // import [COMPONENT_NAME] from './components/[COMPONENT_NAME]'
 
 import { Route, Routes, useParams } from 'react-router-dom'

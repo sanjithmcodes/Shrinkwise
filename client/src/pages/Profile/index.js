@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import Post from '../Post'
+import Post from '../../components/Post'
 import {Navigate, useNavigate} from 'react-router-dom'
-import LossEventForm from '../LossEventForm'
+import LossEventForm from '../../components/LossEventForm'
 
 const Profile = () => {
     const [posts, setPosts] = useState([])
