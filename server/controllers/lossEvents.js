@@ -75,12 +75,15 @@ module.exports = {
             // Find post by id
             let post = await LossEvent.findById({ _id: req.params.id });
             // Delete image from cloudinary
-            await cloudinary.uploader.destroy(lossEvent.cloudinaryId);
+            if (post.cloudinaryId) {
+                await cloudinary.uploader.destroy(post.cloudinaryId);
+            }
             // Delete post from db
             await LossEvent.remove({ _id: req.params.id });
             console.log("Deleted Post");
             res.redirect("/profile");
         } catch (err) {
+            console.log(err)
             res.redirect("/profile");
         }
     },

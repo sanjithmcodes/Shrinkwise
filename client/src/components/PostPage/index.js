@@ -23,25 +23,11 @@ export default function PostPage() {
         return
     }, [])
 
-    async function handleFavourited(e){
-        e.preventDefault()
-        if(!isFavourited){
-            await fetch(`/post/likePost/${id}?_method=PUT`)
-                .catch(err => console.error(err))
-            setIsFavourited(true);
-        } else {
-            await fetch(`/post/unlikePost/${id}?_method=PUT`)
-                .catch(err => console.error(err))
-            setIsFavourited(false);
-
-        }
-    }
-
     const navigate = useNavigate()
     async function handleDelete(e){
         e.preventDefault()
         try{
-            await fetch(`/post/deletePost/${id}?_method=DELETE`, {
+            await fetch(`/lossEvent/deleteLossEvent/${id}?_method=DELETE`, {
             'method': "POST",
             })
             navigate('/profile')
