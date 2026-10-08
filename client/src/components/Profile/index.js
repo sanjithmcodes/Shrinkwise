@@ -22,15 +22,16 @@ const Profile = () => {
     const [date, setDate] = useState('')
     const [description, setDescription] = useState('')
     const [selectedFile, setSelectedFile] = useState(undefined)
-    
-    useEffect(() => {
-        async function fetchProfile() {
+
+    async function fetchProfile() {
             const res = await fetch('/profile')
             const response = await res.json()
             setPosts(response.posts)
             setEmail(response.email)
             setUserName(response.userName)
         }
+    
+    useEffect(() => {
         fetchProfile();
         return;
     }, []) 
@@ -105,7 +106,8 @@ const Profile = () => {
 
             await fetch('/lossEvent/createLossEvent', options)
                 .then(res => {
-                    window.location.reload()
+                    fetchProfile()
+                    
                     // fetch('/profile')
                     //     .then(res => res.json())
                     //     .then(response => {
