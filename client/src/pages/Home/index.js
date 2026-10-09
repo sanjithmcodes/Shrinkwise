@@ -2,10 +2,10 @@ import React from 'react'
 
 const Home = () => {
     return (
-        <main class="container">
-            <div class="row justify-content-around mt-5">
-                <a href="/login" class="col-3 btn btn-primary"> Login</a>
-                <a href="/signup" class="col-3 btn btn-primary"> Signup</a>
+        <main className="container">
+            <div className="row justify-content-around mt-5">
+                <a href="/login" className="col-3 btn btn-primary"> Login</a>
+                <a href="/signup" className="col-3 btn btn-primary"> Signup</a>
             </div>
         </main>
     )
