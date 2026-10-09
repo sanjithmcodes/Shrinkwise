@@ -40,24 +40,24 @@ export default function PostPage() {
     }
 
     return (
-        <div class="container">
-            <div class="row justify-content-center mt-5">
-                <div class="col-6">
+        <div className="container">
+            <div className="row justify-content-center mt-5">
+                <div className="col-6">
                     <h2>£{post.cost}</h2>
-                    <img class="img-fluid" src={post.image} />
-                    <div class="row justify-content-between">
+                    <img className="img-fluid" src={post.image} />
+                    <div className="row justify-content-between">
                         <form
-                            class="col-1"
+                            className="col-1"
                         >
                         </form>
                         {user === post.user ?
                             (
                             <form
-                                class="col-3"
+                                className="col-3"
                                 
                                 onSubmit={handleDelete}
                             >
-                                <button class="btn btn-primary fa fa-trash" type="submit"></button>
+                                <button className="btn btn-primary fa fa-trash" type="submit"></button>
                             </form>
                             )
                             :
@@ -68,12 +68,12 @@ export default function PostPage() {
                     </div>
                 </div>
                             {/* <DeletePost userId={user} postUser={post.user} postId={post.id} /> */}
-                <div class="col-3 mt-5">
+                <div className="col-3 mt-5">
                     <p>{post.description}</p>
                 </div>
-                <div class="col-6 mt-5">
-                    <a class="btn btn-primary mx-3" href="/profile">Return to Profile</a>
-                    <a class="btn btn-primary mx-3" href="/feed">Return to Feed</a>
+                <div className="col-6 mt-5">
+                    <a className="btn btn-primary mx-3" href="/profile">Return to Profile</a>
+                    <a className="btn btn-primary mx-3" href="/feed">Return to Feed</a>
                 </div>
             </div>
         </div>

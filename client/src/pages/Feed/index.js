@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import Post from '../../components/Post'
+import { FaTrash } from "react-icons/fa";
+
 
 const Feed = () => {
     const [posts, setPosts] = useState([])
@@ -16,20 +18,20 @@ const Feed = () => {
 
 
     return (
-        <div class="container">
-            <div class="row justify-content-center mt-5">
-                <ul class="row list-unstyled">
+        <div className="container">
+            <div className="row justify-content-center mt-5">
+                <ul className="row list-unstyled">
                     {
                         posts.map((e,i) => {
                             return (
-                                <Post ID={e._id} image={e.image} />
+                                <Post key={e._id} ID={e._id} image={e.image} />
                             )
                         })
                     }
                 </ul>
             </div>
 
-            <table class="table table-striped tw-text-center">
+            <table className="table table-striped tw-text-center">
                 <thead>
                     <tr>
                     <th scope="col"></th>
@@ -48,17 +50,17 @@ const Feed = () => {
                     {
                         posts.map((e,i)=>{
                             return (
-                                <tr className='align-middle'>
+                                <tr key={e._id} className='align-middle'>
                                     <th scope="row">{i}</th>
-                                    <td>{e.createdAt.slice(0,10)}</td>
+                                    <td>{e.date.slice(0,10)}</td>
                                     <td>{e.type.toUpperCase()}</td>
                                     <td>{e.category.toUpperCase()}</td>
                                     <td>{e.description || '-'}</td>
                                     <td>{e.quantity || '-'}</td>
-                                    <td>£{e.cost}</td>
-                                    <td>£{e.cost * (e.quantity ? e.quantity : 1)}</td>
+                                    <td>£{e.cost.toFixed(2)}</td>
+                                    <td>£{(e.cost * (e.quantity ? e.quantity : 1)).toFixed(2)}</td>
                                     <td><img className="img-fluid tw-h-16 tw-w-16 tw-object-cover" src={e.image} alt='Loss Thumbnail'></img></td>
-                                    <td></td>
+                                    <td><FaTrash /></td>
                                 </tr>
                             )
                         })

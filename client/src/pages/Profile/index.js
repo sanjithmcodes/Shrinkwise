@@ -59,7 +59,7 @@ const Profile = () => {
                             {
                                 posts.map((e,i) => {
                                     return (
-                                        <Post key={"post-"+i} ID={e._id} image={e.image}/>
+                                        <Post key={e._id} ID={e._id} image={e.image}/>
                                     )
                                 })
                             }
