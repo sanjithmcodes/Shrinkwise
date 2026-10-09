@@ -29,34 +29,40 @@ const Feed = () => {
                 </ul>
             </div>
 
-            <table class="table table-striped">
+            <table class="table table-striped tw-text-center">
                 <thead>
                     <tr>
                     <th scope="col"></th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Unit Cost</th>
+                    <th scope="col">Total Loss</th>
+                    <th scope="col">Photo</th>
+                    <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    </tr>
-                    <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                    </tr>
+                    {
+                        posts.map((e,i)=>{
+                            return (
+                                <tr className='align-middle'>
+                                    <th scope="row">{i}</th>
+                                    <td>{e.createdAt.slice(0,10)}</td>
+                                    <td>{e.type.toUpperCase()}</td>
+                                    <td>{e.category.toUpperCase()}</td>
+                                    <td>{e.description || '-'}</td>
+                                    <td>{e.quantity || '-'}</td>
+                                    <td>£{e.cost}</td>
+                                    <td>£{e.cost * (e.quantity ? e.quantity : 1)}</td>
+                                    <td><img className="img-fluid tw-h-16 tw-w-16 tw-object-cover" src={e.image} alt='Loss Thumbnail'></img></td>
+                                    <td></td>
+                                </tr>
+                            )
+                        })
+                    }
                 </tbody>
             </table>
         </div>
