@@ -6,6 +6,8 @@ import { FaTrash } from "react-icons/fa";
 const Feed = () => {
     const [posts, setPosts] = useState([])
 
+    
+
     useEffect(() => {
         async function fetchPosts() {
             const res = await fetch('/feed')
@@ -13,8 +15,24 @@ const Feed = () => {
             setPosts(response.posts)
         }
         fetchPosts();
-        return;
     }, []) 
+
+    async function handleDelete(id){
+        try{
+            const res = await fetch(`/lossEvent/deleteLossEvent/${id}?_method=DELETE`, {
+            'method': "POST",
+            })
+            if (!res.ok) {
+                throw new Error('Failed to delete loss event')
+            }
+            const updatedPosts = posts.filter(e => e._id !== id)
+            setPosts(updatedPosts)
+            console.log('Loss event deleted')
+        }
+        catch(err) {
+            console.log(err)
+        }
+    }
 
 
     return (
@@ -60,7 +78,9 @@ const Feed = () => {
                                     <td>£{e.cost.toFixed(2)}</td>
                                     <td>£{(e.cost * (e.quantity ? e.quantity : 1)).toFixed(2)}</td>
                                     <td><img className="img-fluid tw-h-16 tw-w-16 tw-object-cover" src={e.image} alt='Loss Thumbnail'></img></td>
-                                    <td><FaTrash /></td>
+                                    <td>
+                                        <button class='tw-border-none tw-bg-transparent' onClick={() => handleDelete(e._id)}><FaTrash /></button>
+                                    </td>
                                 </tr>
                             )
                         })
