@@ -147,7 +147,7 @@ const LossEventForm = (props) => {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="date" className="form-label">Date</label>
-                        <input onChange={handleDate} required type="date" className="form-control" id="date" name="date" />
+                        <input onChange={handleDate} required type="date" max = {new Date().toISOString().split('T')[0]} className="form-control" id="date" name="date" />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="description" className="form-label">Description</label>

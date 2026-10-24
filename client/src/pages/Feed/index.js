@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import DeleteButton from '../../components/DeleteButton';
+import BasicDropdown from '../../components/BasicDropdown';
+import SummaryCards from '../../components/SummaryCards';
 
 
 const Feed = () => {
     const [posts, setPosts] = useState([])
+    const [period, setPeriod] = useState('All Time')
+    
 
     useEffect(() => {
         async function fetchPosts() {
@@ -14,8 +18,49 @@ const Feed = () => {
         fetchPosts();
     }, []) 
 
+    function selectOption(option) {
+        setPeriod(option)
+    }
+    
+
+    function filterByPeriod(posts, period) {
+        const DAY = 1000 * 60 * 60 * 24
+        const now = new Date()
+        const today = new Date().setHours(0, 0, 0, 0)           
+
+        return posts.filter(e => {
+            const date = new Date(e.date).setHours(0, 0, 0, 0)   
+            const daysAgo = Math.round((today - date) / DAY)            
+            return daysAgo < period
+        })
+    }
+
+    let filteredPosts
+
+    if (period == 'All Time') {
+        filteredPosts = posts
+    } else if (period == 'Today') {
+        filteredPosts = filterByPeriod(posts, 1)
+    } else if (period == 'Last 7 Days') {
+        filteredPosts = filterByPeriod(posts, 7)
+    } else if (period == 'Last 30 Days') {
+        filteredPosts = filterByPeriod(posts, 30)
+    }
+
 
     return (
+        <>
+
+        <BasicDropdown selectOption={selectOption} toggle='Select time period' select={[
+            {option: 'Today'},
+            {option: 'Last 7 Days'}, 
+            {option: 'Last 30 Days'}, 
+            {option: 'All Time'}
+            ]}
+        />
+        
+        <SummaryCards filteredPosts={filteredPosts} period={period}/>
+        
         <div className="container">
 
             <table className="tw-mt-20 table table-striped tw-text-center">
@@ -35,11 +80,11 @@ const Feed = () => {
                 </thead>
                 <tbody>
                     {
-                        posts.map((e,i)=>{
+                        filteredPosts.map((e,i)=>{
                             return (
                                 <tr key={e._id} className='align-middle'>
                                         <th scope="row">{i}</th>
-                                        <td>{e.date.slice(0,10)}</td>
+                                        <td>{e.date.slice(0,10).split('-').reverse().join('/')}</td>
                                         <td>{e.type.toUpperCase()}</td>
                                         <td>{e.category.toUpperCase()}</td>
                                         <td>{e.description || '-'}</td>
@@ -57,6 +102,7 @@ const Feed = () => {
                 </tbody>
             </table>
         </div>
+        </>
     )
 }
 
