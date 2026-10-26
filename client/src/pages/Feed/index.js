@@ -93,7 +93,7 @@ const Feed = () => {
                                         <td>£{(e.cost * (e.quantity ? e.quantity : 1)).toFixed(2)}</td>
                                         <td><img className="img-fluid tw-h-16 tw-w-16 tw-object-cover" src={e.image} alt='Loss Thumbnail'></img></td>
                                         <td>
-                                            <DeleteButton ID={e._id} setPosts={setPosts} posts={posts}/>
+                                            <DeleteButton ID={e._id} setPosts={setPosts}/>
                                         </td>
                                 </tr>
                             )

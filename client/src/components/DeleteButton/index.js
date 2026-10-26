@@ -19,8 +19,7 @@ function DeleteModal(props) {
             if (!res.ok) {
                 throw new Error('Failed to delete loss event')
             }
-            const updatedPosts = props.posts.filter(e => e._id !== id)
-            props.setPosts(updatedPosts)
+            props.setPosts(prev => prev.filter(e => e._id !== id))
             console.log('Loss event deleted')
             handleClose()
         }
