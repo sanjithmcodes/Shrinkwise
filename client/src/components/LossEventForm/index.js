@@ -1,13 +1,17 @@
 import React, {useState, useEffect} from 'react'
 
 const LossEventForm = (props) => {
+    //when a lossEvent is passed in, the form edits it instead of creating a new one
+    const lossEvent = props.lossEvent
+    const isEdit = Boolean(lossEvent)
+
     //form states
-    const [type, setType] = useState('')
-    const [category, setCategory] = useState('')
-    const [cost, setCost] = useState('')
-    const [quantity, setQuantity] = useState('')
-    const [date, setDate] = useState('')
-    const [description, setDescription] = useState('')
+    const [type, setType] = useState(isEdit ? lossEvent.type : '')
+    const [category, setCategory] = useState(isEdit ? lossEvent.category : '')
+    const [cost, setCost] = useState(isEdit ? lossEvent.cost : '')
+    const [quantity, setQuantity] = useState(isEdit ? lossEvent.quantity ?? '' : '')
+    const [date, setDate] = useState(isEdit ? lossEvent.date.slice(0,10) : '')
+    const [description, setDescription] = useState(isEdit ? lossEvent.description ?? '' : '')
     const [selectedFile, setSelectedFile] = useState(undefined)
 
     //Error states
@@ -50,10 +54,11 @@ const LossEventForm = (props) => {
             formData.append("cost", cost)
             formData.append("date", date)
 
-            if (description) {
+            //when editing, always send these so a cleared field gets removed
+            if (description || isEdit) {
                 formData.append("description", description)
             }
-            if (quantity) {
+            if (quantity || isEdit) {
                 formData.append("quantity", quantity)
             }
             if (selectedFile) {
@@ -67,10 +72,22 @@ const LossEventForm = (props) => {
             const formObject = Object.fromEntries(formData.entries())
             console.log(formObject)
 
-            await fetch('/lossEvent/createLossEvent', options)
-                .then(res => {
-                    props.onSaved()
-                    
+            const url = isEdit
+                ? `/lossEvent/updateLossEvent/${lossEvent._id}?_method=PUT`
+                : '/lossEvent/createLossEvent'
+
+            await fetch(url, options)
+                .then(async res => {
+                    if (!res.ok) {
+                        throw new Error('Failed to save loss event')
+                    }
+                    if (isEdit) {
+                        const response = await res.json()
+                        props.onSaved(response.lossEvent)
+                    } else {
+                        props.onSaved()
+                    }
+
                     // fetch('/profile')
                     //     .then(res => res.json())
                     //     .then(response => {
@@ -78,8 +95,11 @@ const LossEventForm = (props) => {
                     //     })
                     //     .catch(err => console.error(err))
                 })
-                .catch(err => console.error(err))
-            
+                .catch(err => {
+                    console.error(err)
+                    temp = [...temp, 'Saving failed, please try again']
+                })
+
         }
         setErrors(temp)
     }
@@ -108,11 +128,11 @@ const LossEventForm = (props) => {
 
 
             <div className="mt-5">
-                <h2>Add a Loss Event</h2>
+                <h2>{isEdit ? 'Edit Loss Event' : 'Add a Loss Event'}</h2>
                 <form encType="multipart/form-data" onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label htmlFor="type" className="form-label">Type</label>
-                        <select required defaultValue='' onChange={handleType} type="text" className="form-control" id="type" name="type">
+                        <select required value={type} onChange={handleType} type="text" className="form-control" id="type" name="type">
                             <option value='' disabled> -- select an option -- </option>
                             <option value='waste'>Waste/Spoilage</option>
                             <option value='discrepancy'>Till discrepancy</option>
@@ -121,7 +141,7 @@ const LossEventForm = (props) => {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="category" className="form-label">Category</label>
-                        <select required defaultValue='' onChange={handleCategory} type="text" className="form-control" id="category" name="category">
+                        <select required value={category} onChange={handleCategory} type="text" className="form-control" id="category" name="category">
                             <option disabled value=''> -- select an option -- </option>
                             <option value='snacks'>Snacks</option>
                             <option value='confectionary'>Confectionary</option>
@@ -139,25 +159,25 @@ const LossEventForm = (props) => {
                     </div>
                     <div className="mb-3">
                         <label htmlFor="cost" className="form-label">Cost per unit</label>
-                        <input onChange={handleCost} required type="number" step=".01" className="form-control" id="cost" name="cost" />
+                        <input value={cost} onChange={handleCost} required type="number" step=".01" className="form-control" id="cost" name="cost" />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="quantity" className="form-label">Quantity</label>
-                        <input onChange={handleQuantity} type="number" className="form-control" id="quantity" name="quantity" />
+                        <input value={quantity} onChange={handleQuantity} type="number" className="form-control" id="quantity" name="quantity" />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="date" className="form-label">Date</label>
-                        <input onChange={handleDate} required type="date" max = {new Date().toISOString().split('T')[0]} className="form-control" id="date" name="date" />
+                        <input value={date} onChange={handleDate} required type="date" max = {new Date().toISOString().split('T')[0]} className="form-control" id="date" name="date" />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="description" className="form-label">Description</label>
-                        <textarea onChange={handleDescription} className="form-control" id="description" name="description"></textarea>
+                        <textarea value={description} onChange={handleDescription} className="form-control" id="description" name="description"></textarea>
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="imgUpload" className="form-label">Image</label>
+                        <label htmlFor="imgUpload" className="form-label">Image{isEdit && ' (leave empty to keep current image)'}</label>
                         <input type="file" className="form-control" id="imageUpload" name="file" onChange={handleFile} accept="image/*"></input>
                     </div>
-                    <button type="submit" className="btn btn-primary" value="Upload">Submit</button>
+                    <button type="submit" className="btn btn-primary" value="Upload">{isEdit ? 'Save' : 'Submit'}</button>
                 </form>
             </div>
 

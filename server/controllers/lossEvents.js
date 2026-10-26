@@ -46,10 +46,45 @@ module.exports = {
             console.log(err);
         }
     },
+    updateLossEvent: async (req, res) => {
+        try {
+            // Find loss event by id, only if it belongs to the requesting user
+            const lossEvent = await LossEvent.findOne({ _id: req.params.id, user: req.user.id });
+            if (!lossEvent) {
+                return res.sendStatus(404);
+            }
+
+            lossEvent.type = req.body.type;
+            lossEvent.category = req.body.category;
+            lossEvent.cost = req.body.cost;
+            lossEvent.date = req.body.date;
+            // Empty optional fields are removed rather than saved as ''
+            lossEvent.description = req.body.description || undefined;
+            lossEvent.quantity = req.body.quantity || undefined;
+
+            // Replace image on cloudinary if a new one was uploaded
+            if (req.file) {
+                const oldCloudinaryId = lossEvent.cloudinaryId;
+                const result = await cloudinary.uploader.upload(req.file.path);
+                lossEvent.image = result.secure_url;
+                lossEvent.cloudinaryId = result.public_id;
+                if (oldCloudinaryId) {
+                    await cloudinary.uploader.destroy(oldCloudinaryId);
+                }
+            }
+
+            await lossEvent.save();
+            console.log("Loss event has been updated!");
+            res.send({ lossEvent });
+        } catch (err) {
+            console.log(err)
+            res.sendStatus(500);
+        }
+    },
     deleteLossEvent: async (req, res) => {
         try {
             // Find post by id, only if it belongs to the requesting user
-            let post = await LossEvent.findOne({ _id: req.params.id, user: req.user.id });
+            const post = await LossEvent.findOne({ _id: req.params.id, user: req.user.id });
             if (!post) {
                 return res.sendStatus(404);
             }
