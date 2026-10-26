@@ -1,5 +1,4 @@
 const cloudinary = require("../middleware/cloudinary");
-const Post = require("../models/Post");
 const LossEvent = require("../models/LossEvent");
 const { ObjectId } = require("mongodb");
 
