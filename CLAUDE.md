@@ -33,7 +33,3 @@ The server loads env vars from `server/config/.env` (not the root): `PORT` (must
 - Mongoose 5 / MongoDB driver 3 (legacy connect options, `Model.remove`, `ObjectId(...)` without `new`).
 
 **Client (`client/`)**: Create React App + React 18, React-Bootstrap, react-icons. `pages/` holds route-level components and `components/` holds reusable pieces, each as `<Name>/index.js`. State is local `useState`/`useEffect` with no global store. Multipart uploads are sent as `FormData` with the file under the field name `file`, which must match `upload.single("file")`.
-
-## Known inconsistencies
-
-- The `/lossEvent` create and delete routes have no `ensureAuth`, even though `createLossEvent` relies on `req.user.id`.

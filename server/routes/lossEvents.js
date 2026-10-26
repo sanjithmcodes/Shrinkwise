@@ -7,8 +7,8 @@ const { ensureAuth, ensureGuest } = require("../middleware/auth");
 //Post Routes - simplified for now
 router.get("/:id", ensureAuth, lossEventsController.getLossEvent);
 
-router.post("/createLossEvent", upload.single("file"), lossEventsController.createLossEvent);
+router.post("/createLossEvent", ensureAuth, upload.single("file"), lossEventsController.createLossEvent);
 
-router.delete("/deleteLossEvent/:id", lossEventsController.deleteLossEvent);
+router.delete("/deleteLossEvent/:id", ensureAuth, lossEventsController.deleteLossEvent);
 
 module.exports = router;
