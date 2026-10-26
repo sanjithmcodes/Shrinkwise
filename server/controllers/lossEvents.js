@@ -1,6 +1,5 @@
 const cloudinary = require("../middleware/cloudinary");
 const LossEvent = require("../models/LossEvent");
-const { ObjectId } = require("mongodb");
 
 module.exports = {
     getProfile: async (req, res) => {
@@ -16,15 +15,6 @@ module.exports = {
             const lossEvents = await LossEvent.find().sort({ createdAt: "desc" }).lean();
             res.send({lossEvents})
             // res.render("feed.ejs", { posts: posts });
-        } catch (err) {
-            console.log(err);
-        }
-    },
-    getLossEvent: async (req, res) => {
-        try {
-            const lossEvent = await LossEvent.findById(ObjectId(req.params.id));
-            res.send({user: req.user.id, lossEvent})
-            // res.render("post.ejs", { post: post, user: req.user });
         } catch (err) {
             console.log(err);
         }
@@ -58,8 +48,11 @@ module.exports = {
     },
     deleteLossEvent: async (req, res) => {
         try {
-            // Find post by id
-            let post = await LossEvent.findById({ _id: req.params.id });
+            // Find post by id, only if it belongs to the requesting user
+            let post = await LossEvent.findOne({ _id: req.params.id, user: req.user.id });
+            if (!post) {
+                return res.sendStatus(404);
+            }
             // Delete image from cloudinary
             // Delete post from db
             await LossEvent.remove({ _id: req.params.id });

@@ -6,15 +6,11 @@ export default function PostPage() {
     //post state
     const [post, setPost] = useState({})
 
-    //requesting-user state
-    const [user, setUser] = useState('')
-
     useEffect(() => {
         async function fetchPost() {
             const res = await fetch(`/post/${id}`)
             const response = await res.json()
             setPost(response.post)
-            setUser(response.user)
             // setIsLiked(response.isLiked) //no serverside code to check if post is liked by requser
         }
         fetchPost()
@@ -48,21 +44,13 @@ export default function PostPage() {
                             className="col-1"
                         >
                         </form>
-                        {user === post.user ?
-                            (
-                            <form
-                                className="col-3"
-                                
-                                onSubmit={handleDelete}
-                            >
-                                <button className="btn btn-primary fa fa-trash" type="submit"></button>
-                            </form>
-                            )
-                            :
-                            (
-                                ""
-                            )
-                        }
+                        <form
+                            className="col-3"
+
+                            onSubmit={handleDelete}
+                        >
+                            <button className="btn btn-primary fa fa-trash" type="submit"></button>
+                        </form>
                     </div>
                 </div>
                             {/* <DeletePost userId={user} postUser={post.user} postId={post.id} /> */}

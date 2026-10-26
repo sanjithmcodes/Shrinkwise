@@ -30,6 +30,7 @@ The server loads env vars from `server/config/.env` (not the root): `PORT` (must
 - Auth: Passport local strategy (`config/passport.js`) with sessions stored in Mongo (`connect-mongo`). `middleware/auth.js` `ensureAuth` protects routes. `controllers/auth.js` still contains EJS-era `res.render`/`res.redirect` calls, but there is no view engine configured.
 - Uploads: `middleware/multer.js` accepts only .jpg/.jpeg/.png and writes to temp disk storage. The controller then uploads the file to Cloudinary and saves `image` (the secure URL) and `cloudinaryId` on the document. Deleting a document should also destroy its Cloudinary asset.
 - DELETE/PUT requests from the client go through `method-override` (`?_method=DELETE`).
-- Mongoose 5 / MongoDB driver 3 (legacy connect options, `Model.remove`, `ObjectId(...)` without `new`).
+- Loss events are private to their owner. Controller functions that are mounted on a route scope their queries by `req.user.id` (e.g. `findOne({ _id, user: req.user.id })`) and return 404 when nothing matches. Hiding UI in the client is not enough on its own.
+- Mongoose 5 / MongoDB driver 3 (legacy connect options, `Model.remove`).
 
 **Client (`client/`)**: Create React App + React 18, React-Bootstrap, react-icons. `pages/` holds route-level components and `components/` holds reusable pieces, each as `<Name>/index.js`. State is local `useState`/`useEffect` with no global store. Multipart uploads are sent as `FormData` with the file under the field name `file`, which must match `upload.single("file")`.

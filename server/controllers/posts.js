@@ -1,6 +1,5 @@
 const cloudinary = require("../middleware/cloudinary");
 const LossEvent = require("../models/LossEvent");
-const { ObjectId } = require("mongodb");
 
 module.exports = {
     getProfile: async (req, res) => {
@@ -23,8 +22,11 @@ module.exports = {
     },
     getPost: async (req, res) => {
         try {
-            const post = await LossEvent.findById(ObjectId(req.params.id));
-            res.send({user: req.user.id, post: post})
+            const post = await LossEvent.findOne({ _id: req.params.id, user: req.user.id });
+            if (!post) {
+                return res.sendStatus(404);
+            }
+            res.send({post: post})
             // res.render("post.ejs", { post: post, user: req.user });
         } catch (err) {
             console.log(err);
