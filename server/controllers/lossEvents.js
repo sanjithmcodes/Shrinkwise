@@ -36,7 +36,6 @@ module.exports = {
                 category: req.body.category,
                 description: req.body.description,
                 date: req.body.date,
-                favourited: false,
                 user: req.user.id,
                 image: 'https://static.thenounproject.com/png/1077596-200.png',
                 cost: req.body.cost,
@@ -53,19 +52,6 @@ module.exports = {
 
             res.sendStatus(200);
             console.log("Loss event has been added!");
-        } catch (err) {
-            console.log(err);
-        }
-    },
-    favouriteLossEvent: async (req, res) => {
-        try {
-            await LossEvent.findOneAndUpdate(
-                { _id: ObjectId(req.params.id) },
-                {
-                    favourited: true
-                }
-            );
-            console.log("Favourited");
         } catch (err) {
             console.log(err);
         }

@@ -9,8 +9,6 @@ router.get("/:id", ensureAuth, lossEventsController.getLossEvent);
 
 router.post("/createLossEvent", upload.single("file"), lossEventsController.createLossEvent);
 
-router.put("/favouriteLossEvent", lossEventsController.favouriteLossEvent);
-
 router.delete("/deleteLossEvent/:id", lossEventsController.deleteLossEvent);
 
 module.exports = router;

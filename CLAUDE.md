@@ -36,5 +36,4 @@ The server loads env vars from `server/config/.env` (not the root): `PORT` (must
 
 ## Known inconsistencies
 
-- `favouriteLossEvent` reads `req.params.id`, but its route (`PUT /lossEvent/favouriteLossEvent`) has no `:id`. It also never sends a response. `favourited` isn't in the `LossEvent` schema, so Mongoose drops it.
-- The `/lossEvent` create, favourite, and delete routes have no `ensureAuth`, even though `createLossEvent` relies on `req.user.id`.
+- The `/lossEvent` create and delete routes have no `ensureAuth`, even though `createLossEvent` relies on `req.user.id`.

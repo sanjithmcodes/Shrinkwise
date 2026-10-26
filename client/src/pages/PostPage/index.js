@@ -6,8 +6,6 @@ export default function PostPage() {
     //post state
     const [post, setPost] = useState({})
 
-    const [isFavourited, setIsFavourited] = useState(false)
-
     //requesting-user state
     const [user, setUser] = useState('')
 
