@@ -27,14 +27,6 @@ const Profile = () => {
     }, []) 
 
 
-    async function handleLogout(){
-        await fetch('/logout')
-            .then(res => {
-                navigate('/login')
-            })
-            .catch(err => console.error(err))
-    }
-    
     //checks if user is logged in
     if(email === '' || userName === ''){
         navigate('/login')
@@ -49,7 +41,6 @@ const Profile = () => {
                                 <strong>{userName}</strong>
                                 <span>{email}</span>
                             </div>
-                            <button type="button" onClick={handleLogout} className="btn btn-link">Log out</button>
                         </div>
 
                         <div className="sw-panel">
