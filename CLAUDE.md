@@ -10,7 +10,7 @@ A MERN app forked from the 100Devs `binary-upload-boom` template (EJS → React)
 
 Dependencies are installed separately for each app: `npm install` at the root, then `cd client && npm install`.
 
-- `npm start` (root): in dev, runs `nodemon` for the server (ignores `client/*`) and the CRA dev server on :3000 together via `concurrently`. In the output, `[0]` is the server and `[1]` is the client. If `NODE_ENV=production`, it runs only `node server.js`.
+- `npm start` (root): in dev, runs `nodemon` for the server (ignores `client/*`) and the CRA dev server on :3000 together via `concurrently`. In the output, `[0]` is the server and `[1]` is the client. If `NODE_ENV=production`, it runs only `node server.js`, which also serves `client/build` (build the client first).
 - `npm run client`: client only.
 - `cd client && npm run build`: production build of the client.
 - `cd client && npm test`: CRA/Jest (`react-scripts test`). Run a single test with `npm test -- <pattern>`. No tests exist yet, and the root `npm test` is a placeholder that always fails.
@@ -18,11 +18,13 @@ Dependencies are installed separately for each app: `npm install` at the root, t
 
 ## Environment
 
-The server loads env vars from `server/config/.env` (not the root): `PORT` (must not be 3000, and should be 8000 to match the client proxy), `DB_STRING`, `CLOUD_NAME`, `API_KEY`, `API_SECRET`.
+The server loads env vars from `server/config/.env` (not the root): `PORT` (must not be 3000, and should be 8000 to match the client proxy), `DB_STRING`, `CLOUD_NAME`, `API_KEY`, `API_SECRET`, and `SESSION_SECRET` (optional in dev, required in production).
+
+**Deploying (Render):** one Node Web Service. Build command `npm install && cd client && npm install && npm run build`, start command `node server.js`, and the env vars above plus `NODE_ENV=production` set in the dashboard (Render provides `PORT`).
 
 ## Architecture
 
-**Client ↔ server wiring:** `client/package.json` sets `"proxy": "http://localhost:8000/"`, so the client calls the API with relative `fetch` paths (`/profile`, `/feed`, `/lossEvent/...`) and doesn't set any CORS/base URL config. When you add a route, the client path and the Express mount path have to match exactly. Client routes (`client/src/App.js`, react-router v6) share some paths with API routes (e.g. `/feed`, `/post/:id`; the Log a loss page is at `/logloss` but still loads its data from the `/profile` API). Requests from the React page reach the API through the proxy.
+**Client ↔ server wiring:** `client/package.json` sets `"proxy": "http://localhost:8000/"`, so the client calls the API with relative `fetch` paths (`/profile`, `/feed`, `/lossEvent/...`) and doesn't set any CORS/base URL config. When you add a route, the client path and the Express mount path have to match exactly. Client routes (`client/src/App.js`, react-router v6) share some paths with API routes (e.g. `/feed`, `/post/:id`; the Log a loss page is at `/logloss` but still loads its data from the `/profile` API). Requests from the React page reach the API through the proxy. In production, Express serves the React build and sends `index.html` for any GET that prefers `text/html` (a browser page load), so those shared paths still work on refresh. `fetch` calls fall through to the API.
 
 **Server (`server.js` + `server/`)**: MVC layout with Express.
 - Routes are mounted at `/` (`routes/main.js`: auth, profile, feed), `/post` (`routes/posts.js`), and `/lossEvent` (`routes/lossEvents.js`).
