@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {Link} from 'react-router-dom'
 
 
 const Signup = () => {
@@ -69,34 +70,37 @@ const Signup = () => {
     }
 
     return (
-        <main className="container">
-            <div className="row justify-content-center">
-                <section className="col-6 mt-5">
+        <main className="container sw-page">
+            <section className="sw-auth">
+                <h1>Create your account</h1>
+                <p className="sw-muted mb-4">Start logging losses in under a minute.</p>
+                <div className="sw-panel">
                     {errors.map((err,i) => {
-                        return <span key="{i}" className="alert alert-danger">{err}</span>
+                        return <span key={i} className="sw-alert" role="alert">{err}</span>
                     })}
-                    <form className="mt-4">
+                    <form>
                         <div className="mb-3">
-                            <label htmlFor="userName" className="form-label">User Name</label>
-                            <input onChange={handleUserName} type="text" className="form-control" id="userName" name="userName"></input>
+                            <label htmlFor="userName" className="form-label">User name</label>
+                            <input onChange={handleUserName} type="text" className="form-control" id="userName" name="userName" autoComplete="username"></input>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                            <input onChange={handleEmail} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email"></input>
+                            <input onChange={handleEmail} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" autoComplete="email"></input>
                             <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="password" className="form-label">Password</label>
-                            <input onChange={handlePassword} type="password" className="form-control" id="password" name="password"></input>
+                            <input onChange={handlePassword} type="password" className="form-control" id="password" name="password" autoComplete="new-password"></input>
                         </div>
-                        <div className="mb-3">
-                            <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
-                            <input type="password" className="form-control" onChange={handleConfirm} id="confirmPassword" name="confirmPassword"></input>
+                        <div className="mb-4">
+                            <label htmlFor="confirmPassword" className="form-label">Confirm password</label>
+                            <input type="password" className="form-control" onChange={handleConfirm} id="confirmPassword" name="confirmPassword" autoComplete="new-password"></input>
                         </div>
-                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+                        <button type="submit" className="btn btn-primary w-100" onClick={handleSubmit}>Create account</button>
                     </form>
-                </section>
-            </div>
+                </div>
+                <p className="sw-auth-switch">Already have an account? <Link to="/login">Log in</Link></p>
+            </section>
         </main>
     )
 }

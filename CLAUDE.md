@@ -33,4 +33,17 @@ The server loads env vars from `server/config/.env` (not the root): `PORT` (must
 - Loss events are private to their owner. Controller functions that are mounted on a route scope their queries by `req.user.id` (e.g. `findOne({ _id, user: req.user.id })`) and return 404 when nothing matches. Hiding UI in the client is not enough on its own.
 - Mongoose 5 / MongoDB driver 3 (legacy connect options, `Model.remove`).
 
-**Client (`client/`)**: Create React App + React 18, React-Bootstrap, react-icons. `pages/` holds route-level components and `components/` holds reusable pieces, each as `<Name>/index.js`. State is local `useState`/`useEffect` with no global store. Multipart uploads are sent as `FormData` with the file under the field name `file`, which must match `upload.single("file")`.
+**Client (`client/`)**: Create React App + React 18, React-Bootstrap, react-icons. `pages/` holds route-level components and `components/` holds reusable pieces, each as `<Name>/index.js`. State is local `useState`/`useEffect` with no global store. Multipart uploads are sent as `FormData` with the file under the field name `file`, which must match `upload.single("file")`. Display labels for `type`/`category` values and the money/date formatting (`formatMoney`, `formatDate`, `lossTotal`) live in `src/lossFormat.js`. Use them instead of formatting inline.
+
+## Design system
+
+The client is branded **Shrinkwise** and has a warm, friendly look aimed at shop staff. All styling is in `client/src/styles.css`, and every custom class uses the `sw-` prefix. Bootstrap 5.3 is imported from npm in `src/index.js`. Don't add Bootstrap, Tailwind or Font Awesome back via CDN. Use `react-icons/fi` (Feather) for icons.
+
+- **Theme:** light/dark follows the OS. An inline script in `public/index.html` sets `data-bs-theme` on `<html>`. Colors are `--sw-*` tokens defined for both themes at the top of `styles.css` and mapped onto Bootstrap's `--bs-*` variables. Use the tokens and never hard-code hex values in components. Each new color needs a light and a dark value.
+- **Palette:** sage paper background, aubergine ink, pine (`--sw-pine`) for primary actions and links, marigold (`--sw-marigold`) only for loss amounts, raspberry for destructive actions. Type chips use `.sw-chip.is-<type>` (`waste`/`discrepancy`/`unaccounted`).
+- **Type:** Gabarito (headings, numbers via `.sw-num` with tabular figures) and Atkinson Hyperlegible (body), loaded from Google Fonts.
+- **Signature element:** loss amounts are price-gun stickers. Use `.sw-sticker` inline and `.sw-tag` (tag shape with a hole) for headline totals. Keep marigold reserved for money lost so it stays meaningful. The Overview total "stamps" in via `.is-stamped`, keyed by period. That is the only ambient animation, and it respects `prefers-reduced-motion`.
+- **Shapes:** pill buttons (`border-radius: 999px`), 0.75rem inputs, 1.25rem panels (`.sw-panel`). Borders rather than drop shadows. Only the `.sw-tag` has an offset shadow.
+- **Layout:** pages are `<main className="container sw-page">` with an `.sw-page-head` (h1 + controls). Use CSS grid with `minmax(0, 1fr)` columns that collapse to one column on small screens. The Feed shows a table at `md`+ and stacked `.sw-card`s below it. Check new views at 390px width.
+- **Copy:** sentence case, no all-caps labels, plain verbs. Buttons say what happens ("Save loss", "Delete loss", "Log a loss"). Empty states tell the user what to do next. Errors use `.sw-alert` with `role="alert"`.
+- **Accessibility:** icon-only buttons (`.sw-icon-btn`) need an `aria-label`, focus rings are visible (`:focus-visible`), and toggle groups use `aria-pressed`.

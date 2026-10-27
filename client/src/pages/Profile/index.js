@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import Post from '../../components/Post'
-import {Navigate, useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import LossEventForm from '../../components/LossEventForm'
 
 const Profile = () => {
@@ -40,37 +40,42 @@ const Profile = () => {
         navigate('/login')
     }else{
         return (
-            <div className="container">
-                <div className="row mt-5">
-                    <div className="col-6">
-                        <div>
-                            <p><strong>User Name</strong>: {userName}</p>
-                            <p><strong>Email</strong>: {email}</p>
-                            <a onClick={handleLogout} className="col-3 btn btn-primary">Logout</a>
+            <main className="container sw-page">
+                <div className="sw-profile">
+                    <div>
+                        <div className="sw-user">
+                            <span className="sw-avatar" aria-hidden="true">{userName.charAt(0).toUpperCase()}</span>
+                            <div className="sw-user-text">
+                                <strong>{userName}</strong>
+                                <span>{email}</span>
+                            </div>
+                            <button type="button" onClick={handleLogout} className="btn btn-link">Log out</button>
                         </div>
-                        
-                        
-                        <LossEventForm onSaved = {fetchProfile}/>
-                    
-                    </div>
-                    
-                    <div className="col-6">
-                        <ul className="row list-unstyled">
-                            {
-                                posts.map((e,i) => {
-                                    return (
-                                        <Post key={e._id} ID={e._id} image={e.image}/>
-                                    )
-                                })
-                            }
-    
-                        </ul>
-                        <div className="row justify-content-center mt-5">
-                            <a className="btn btn-primary" href="/feed">Return to Feed</a>
+
+                        <div className="sw-panel">
+                            <LossEventForm onSaved = {fetchProfile}/>
                         </div>
                     </div>
+
+                    <section>
+                        <h2 className="h3 mb-3">Your logged losses</h2>
+                        {posts.length === 0 ? (
+                            <p className="sw-muted">Nothing logged yet. Losses you save will show up here.</p>
+                        ) : (
+                            <ul className="sw-grid">
+                                {
+                                    posts.map((e,i) => {
+                                        return (
+                                            <Post key={e._id} lossEvent={e}/>
+                                        )
+                                    })
+                                }
+                            </ul>
+                        )}
+                        <Link className="btn btn-outline-primary" to="/feed">See the overview</Link>
+                    </section>
                 </div>
-            </div>
+            </main>
         )
     }
 }

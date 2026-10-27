@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import { TYPE_LABELS, CATEGORY_LABELS } from '../../lossFormat'
 
 const LossEventForm = (props) => {
     //when a lossEvent is passed in, the form edits it instead of creating a new one
@@ -119,68 +120,59 @@ const LossEventForm = (props) => {
 
     return (
         <>
+            <h2 className="h3 mb-3">{isEdit ? 'Edit loss' : 'Log a loss'}</h2>
 
-            <div className="mt-5">
-                {errors.map((err,i) => {
-                    return <span key={i} className="alert alert-danger">{err}</span>
-                })}
-            </div>
+            {errors.map((err,i) => {
+                return <span key={i} className="sw-alert" role="alert">{err}</span>
+            })}
 
-
-            <div className="mt-5">
-                <h2>{isEdit ? 'Edit Loss Event' : 'Add a Loss Event'}</h2>
-                <form encType="multipart/form-data" onSubmit={handleSubmit}>
-                    <div className="mb-3">
+            <form encType="multipart/form-data" onSubmit={handleSubmit}>
+                <div className="sw-form-grid">
+                    <div>
                         <label htmlFor="type" className="form-label">Type</label>
-                        <select required value={type} onChange={handleType} type="text" className="form-control" id="type" name="type">
-                            <option value='' disabled> -- select an option -- </option>
-                            <option value='waste'>Waste/Spoilage</option>
-                            <option value='discrepancy'>Till discrepancy</option>
-                            <option value='unaccounted'>Unaccounted Stock</option>
+                        <select required value={type} onChange={handleType} className="form-select" id="type" name="type">
+                            <option value='' disabled>Choose a type</option>
+                            {Object.entries(TYPE_LABELS).map(([value, label]) => (
+                                <option key={value} value={value}>{label}</option>
+                            ))}
                         </select>
                     </div>
-                    <div className="mb-3">
+                    <div>
                         <label htmlFor="category" className="form-label">Category</label>
-                        <select required value={category} onChange={handleCategory} type="text" className="form-control" id="category" name="category">
-                            <option disabled value=''> -- select an option -- </option>
-                            <option value='snacks'>Snacks</option>
-                            <option value='confectionary'>Confectionary</option>
-                            <option value='beverages'>Beverages</option>
-                            <option value='dairy'>Dairy</option>
-                            <option value='frozen foods'>Frozen Foods</option>
-                            <option value='grocery'>Grocery/Packaged Foods</option>
-                            <option value='tobacco'>Tobacco</option>
-                            <option value='alcohol'>Alcohol</option>
-                            <option value='health & beauty'>Health & Beauty</option>
-                            <option value='household items'>Household Items</option>
-                            <option value='automotive'>Automotive</option>
-                            <option value='other'>Other</option>
+                        <select required value={category} onChange={handleCategory} className="form-select" id="category" name="category">
+                            <option disabled value=''>Choose a category</option>
+                            {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
+                                <option key={value} value={value}>{label}</option>
+                            ))}
                         </select>
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="cost" className="form-label">Cost per unit</label>
-                        <input value={cost} onChange={handleCost} required type="number" step=".01" className="form-control" id="cost" name="cost" />
+                    <div>
+                        <label htmlFor="cost" className="form-label">Cost per unit (£)</label>
+                        <input value={cost} onChange={handleCost} required type="number" step=".01" inputMode="decimal" className="form-control" id="cost" name="cost" />
                     </div>
-                    <div className="mb-3">
+                    <div>
                         <label htmlFor="quantity" className="form-label">Quantity</label>
-                        <input value={quantity} onChange={handleQuantity} type="number" className="form-control" id="quantity" name="quantity" />
+                        <input value={quantity} onChange={handleQuantity} type="number" inputMode="numeric" className="form-control" id="quantity" name="quantity" aria-describedby="quantityHelp" />
+                        <div id="quantityHelp" className="form-text">Leave empty for a single item.</div>
                     </div>
-                    <div className="mb-3">
+                    <div>
                         <label htmlFor="date" className="form-label">Date</label>
                         <input value={date} onChange={handleDate} required type="date" max = {new Date().toISOString().split('T')[0]} className="form-control" id="date" name="date" />
                     </div>
-                    <div className="mb-3">
+                    <div className="is-wide">
                         <label htmlFor="description" className="form-label">Description</label>
-                        <textarea value={description} onChange={handleDescription} className="form-control" id="description" name="description"></textarea>
+                        <textarea value={description} onChange={handleDescription} className="form-control" id="description" name="description" rows="2" placeholder="What happened? e.g. milk past its date"></textarea>
                     </div>
-                    <div className="mb-3">
-                        <label htmlFor="imgUpload" className="form-label">Image{isEdit && ' (leave empty to keep current image)'}</label>
-                        <input type="file" className="form-control" id="imageUpload" name="file" onChange={handleFile} accept="image/*"></input>
+                    <div className="is-wide">
+                        <label htmlFor="imageUpload" className="form-label">Photo</label>
+                        <input type="file" className="form-control" id="imageUpload" name="file" onChange={handleFile} accept="image/*" aria-describedby="imageHelp"></input>
+                        <div id="imageHelp" className="form-text">
+                            {isEdit ? 'Leave empty to keep the current photo.' : 'Optional. JPG or PNG.'}
+                        </div>
                     </div>
-                    <button type="submit" className="btn btn-primary" value="Upload">{isEdit ? 'Save' : 'Submit'}</button>
-                </form>
-            </div>
-
+                </div>
+                <button type="submit" className="btn btn-primary mt-4" value="Upload">{isEdit ? 'Save changes' : 'Save loss'}</button>
+            </form>
         </>
     )
 }

@@ -1,5 +1,33 @@
 import React from 'react'
+import { TYPE_LABELS, CATEGORY_LABELS, formatMoney, lossTotal } from '../../lossFormat'
 
+function Breakdown({ title, totals, labels }) {
+    const rows = Object.entries(totals).sort((a, b) => b[1] - a[1])
+    const max = rows.length ? rows[0][1] : 0
+
+    return (
+        <section className="sw-breakdown sw-panel">
+            <h2>{title}</h2>
+            {rows.length === 0 ? (
+                <p className="sw-muted mb-0">Nothing logged yet.</p>
+            ) : (
+                <ul>
+                    {rows.map(([key, amount]) => (
+                        <li key={key}>
+                            <div className="sw-bar-row">
+                                <span>{labels[key] || key}</span>
+                                <span className="sw-num">{formatMoney(amount)}</span>
+                            </div>
+                            <div className="sw-bar" aria-hidden="true">
+                                <span style={{ width: `${max ? (amount / max) * 100 : 0}%` }}></span>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </section>
+    )
+}
 
 function SummaryCards({filteredPosts, period}) {
 
@@ -10,9 +38,9 @@ function SummaryCards({filteredPosts, period}) {
     }
 
     filteredPosts.forEach(e => {
-        const loss = Number((e.cost * (e.quantity ? e.quantity : 1)).toFixed(2))
+        const loss = Number(lossTotal(e).toFixed(2))
         postsBreakdown.totalLoss += loss
-        
+
         if (postsBreakdown.type[e.type]) {
             postsBreakdown.type[e.type] += loss
         } else {
@@ -25,37 +53,21 @@ function SummaryCards({filteredPosts, period}) {
             postsBreakdown.category[e.category] = loss
         }
     })
-    
+
+    const count = filteredPosts.length
+
     return (
-        <div className="card-group">
-            <div className="card">
-                <div className="card-body">
-                    <h2 className="card-title">Total Loss</h2>
-                    <span className="card-text">£{postsBreakdown.totalLoss.toFixed(2)}</span>
+        <div className="sw-summary">
+            <section className="sw-summary-total">
+                {/* keyed by period so the tag re-stamps when the period changes */}
+                <div key={period} className="sw-tag is-stamped">
+                    <span className="sw-tag-label">Total lost, {period.toLowerCase()}</span>
+                    <span className="sw-tag-amount">{formatMoney(postsBreakdown.totalLoss)}</span>
                 </div>
-            </div>
-            <div className="card">
-                <div className="card-body">
-                    <h5 className="card-title">Breakdown by Type</h5>
-                    <ul className="card-text">
-                       {Object.keys(postsBreakdown.type).map(e => {
-                        return <li className='tw-uppercase tw-list-none' key={e}>{e}: £{postsBreakdown.type[e].toFixed(2)}</li>
-                        })
-                        } 
-                    </ul>
-                </div>
-            </div>
-            <div className="card">
-                <div className="card-body">
-                    <h5 className="card-title">Breakdown by Category</h5>
-                    <ul className="card-text">
-                       {Object.keys(postsBreakdown.category).map(e => {
-                        return <li className='tw-uppercase tw-list-none' key={e}>{e}: £{postsBreakdown.category[e].toFixed(2)}</li>
-                        })
-                        } 
-                    </ul>
-                </div>
-            </div>
+                <p className="sw-muted">Across {count} {count === 1 ? 'logged loss' : 'logged losses'}.</p>
+            </section>
+            <Breakdown title="By type" totals={postsBreakdown.type} labels={TYPE_LABELS} />
+            <Breakdown title="By category" totals={postsBreakdown.category} labels={CATEGORY_LABELS} />
         </div>
     )
 

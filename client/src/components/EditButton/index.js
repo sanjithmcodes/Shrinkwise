@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import { FaEdit } from 'react-icons/fa';
+import { FiEdit2 } from 'react-icons/fi';
 import LossEventForm from '../LossEventForm';
 
 function EditModal(props) {
@@ -17,17 +17,19 @@ function EditModal(props) {
 
   return (
     <>
-      <button className='tw-border-none tw-bg-transparent' onClick={handleShow}>
-        <FaEdit size='25' color='gray' />
+      <button className='sw-icon-btn' onClick={handleShow} aria-label='Edit loss' title='Edit loss'>
+        <FiEdit2 size='20' />
       </button>
 
       <Modal
         show={show}
         onHide={handleClose}
+        size="lg"
+        centered
       >
         <Modal.Header closeButton />
 
-        <Modal.Body>
+        <Modal.Body className="pt-0 px-4 pb-4">
           <LossEventForm lossEvent={props.lossEvent} onSaved={handleSaved} />
         </Modal.Body>
       </Modal>

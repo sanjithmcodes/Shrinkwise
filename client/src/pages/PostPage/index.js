@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { useParams, Navigate, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import { TYPE_LABELS, CATEGORY_LABELS, formatMoney, formatDate, lossTotal } from "../../lossFormat";
 
 export default function PostPage() {
     let { id } = useParams();
@@ -34,34 +35,41 @@ export default function PostPage() {
     }
 
     return (
-        <div className="container">
-            <div className="row justify-content-center mt-5">
-                <div className="col-6">
-                    <h2>£{post.cost}</h2>
-                    <img className="img-fluid" src={post.image} />
-                    <div className="row justify-content-between">
-                        <form
-                            className="col-1"
-                        >
-                        </form>
-                        <form
-                            className="col-3"
-
-                            onSubmit={handleDelete}
-                        >
-                            <button className="btn btn-primary fa fa-trash" type="submit"></button>
+        <main className="container sw-page">
+            <div className="sw-detail">
+                <div>
+                    {post.image
+                        ? <img className="sw-detail-img" src={post.image} alt="Photo of the loss" />
+                        : <div className="sw-empty sw-muted">No photo for this loss.</div>}
+                </div>
+                <div>
+                    {post.cost !== undefined && (
+                        <div className="sw-tag">
+                            <span className="sw-tag-label">{CATEGORY_LABELS[post.category] || post.category}</span>
+                            <span className="sw-tag-amount">{formatMoney(lossTotal(post))}</span>
+                        </div>
+                    )}
+                    <dl>
+                        <dt>Type</dt>
+                        <dd>{post.type && <span className={`sw-chip is-${post.type}`}>{TYPE_LABELS[post.type] || post.type}</span>}</dd>
+                        <dt>Date</dt>
+                        <dd>{formatDate(post.date)}</dd>
+                        <dt>Quantity</dt>
+                        <dd className="sw-num">{post.quantity || 1} × {formatMoney(post.cost)}</dd>
+                        {post.description && <>
+                            <dt>Description</dt>
+                            <dd>{post.description}</dd>
+                        </>}
+                    </dl>
+                    <div className="d-flex flex-wrap gap-2">
+                        <Link className="btn btn-primary" to="/feed">Back to overview</Link>
+                        <Link className="btn btn-outline-primary" to="/profile">Back to profile</Link>
+                        <form onSubmit={handleDelete}>
+                            <button className="btn btn-link sw-danger-link" type="submit">Delete loss</button>
                         </form>
                     </div>
                 </div>
-                            {/* <DeletePost userId={user} postUser={post.user} postId={post.id} /> */}
-                <div className="col-3 mt-5">
-                    <p>{post.description}</p>
-                </div>
-                <div className="col-6 mt-5">
-                    <a className="btn btn-primary mx-3" href="/profile">Return to Profile</a>
-                    <a className="btn btn-primary mx-3" href="/feed">Return to Feed</a>
-                </div>
             </div>
-        </div>
+        </main>
     )
 }

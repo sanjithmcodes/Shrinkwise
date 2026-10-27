@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { FaTrash } from 'react-icons/fa';
+import { FiTrash2 } from 'react-icons/fi';
 
 function DeleteModal(props) {
   const [show, setShow] = useState(false);
@@ -31,8 +31,8 @@ function DeleteModal(props) {
 
   return (
     <>
-      <button className='tw-border-none tw-bg-transparent' onClick={handleShow}>
-        <FaTrash size='25' color='gray' />
+      <button className='sw-icon-btn is-danger' onClick={handleShow} aria-label='Delete loss' title='Delete loss'>
+        <FiTrash2 size='20' />
       </button>
 
       <Modal
@@ -40,15 +40,20 @@ function DeleteModal(props) {
         onHide={handleClose}
         backdrop="static"
         keyboard={false}
+        centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Are you sure you want to delete this loss event?</Modal.Title>
+          <Modal.Title>Delete this loss?</Modal.Title>
         </Modal.Header>
 
-        
+        <Modal.Body>
+          <p className="mb-0">This removes the entry and its photo. You can't undo this.</p>
+          {error && <span className="sw-alert mt-3 mb-0" role="alert">Couldn't delete the loss. Try again.</span>}
+        </Modal.Body>
+
         <Modal.Footer>
-            {error  && <span className="alert alert-danger">Deletion failed</span>}
-          <Button variant="primary" onClick={() => handleDelete(props.ID)}>Yes, delete</Button>
+          <Button variant="link" onClick={handleClose}>Keep it</Button>
+          <Button variant="danger" onClick={() => handleDelete(props.ID)}>Delete loss</Button>
         </Modal.Footer>
       </Modal>
     </>

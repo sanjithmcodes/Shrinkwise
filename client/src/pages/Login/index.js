@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import {Navigate, useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -37,38 +37,42 @@ const Login = () => {
     }
 
     return (
-        <main className="container">
-            <div className="row justify-content-center">
-                <section className="col-6 mt-5">
-                {errors.map((err,i) => {
-                    return <span key="{i}" className="alert alert-danger">{err}</span>
-                })}
-                <form className="mt-4">
-                    <div className="mb-3">
-                    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        id="exampleInputEmail1"
-                        aria-describedby="emailHelp"
-                        name="email"
-                        onChange={handleEmail}
-                    ></input>
-                    </div>
-                    <div className="mb-3">
-                    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        id="exampleInputPassword1"
-                        name="password"
-                        onChange={handlePassword}
-                    ></input>
-                    </div>
-                        <button onClick={handleSubmit} type="submit" className="btn btn-primary">Submit</button>
+        <main className="container sw-page">
+            <section className="sw-auth">
+                <h1>Welcome back</h1>
+                <p className="sw-muted mb-4">Log in to see this week's losses.</p>
+                <div className="sw-panel">
+                    {errors.map((err,i) => {
+                        return <span key={i} className="sw-alert" role="alert">{err}</span>
+                    })}
+                    <form>
+                        <div className="mb-3">
+                            <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="exampleInputEmail1"
+                                name="email"
+                                autoComplete="email"
+                                onChange={handleEmail}
+                            ></input>
+                        </div>
+                        <div className="mb-4">
+                            <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="exampleInputPassword1"
+                                name="password"
+                                autoComplete="current-password"
+                                onChange={handlePassword}
+                            ></input>
+                        </div>
+                        <button onClick={handleSubmit} type="submit" className="btn btn-primary w-100">Log in</button>
                     </form>
-                </section>
-            </div>
+                </div>
+                <p className="sw-auth-switch">New here? <Link to="/signup">Create an account</Link></p>
+            </section>
         </main>
     )
 }
