@@ -605,16 +605,14 @@ a:hover { color: var(--sw-pine-hover); }
 
 /* ---------- Profile ---------- */
 .sw-profile {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 2rem;
-    align-items: start;
+    max-width: 44rem;
+    margin: 0 auto;
 }
 .sw-user {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: .75rem;
+    min-width: 0;
 }
 .sw-avatar {
     flex: none;
@@ -637,44 +635,158 @@ a:hover { color: var(--sw-pine-hover); }
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.sw-grid {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
-    gap: .75rem;
-}
-.sw-grid-item a {
-    position: relative;
-    display: block;
-    aspect-ratio: 1;
-    border-radius: 1rem;
-    overflow: hidden;
-    background: var(--sw-surface-2);
-    color: var(--sw-muted);
-}
-.sw-grid-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.sw-grid-item .sw-grid-empty {
-    display: grid;
-    place-items: center;
-    height: 100%;
-}
-.sw-grid-item .sw-sticker {
-    position: absolute;
-    left: .5rem;
-    bottom: .5rem;
-    font-size: .9rem;
-}
-@media (max-width: 991.98px) {
-    .sw-profile { grid-template-columns: minmax(0, 1fr); }
-}
 
 /* ---------- Form layout ---------- */
+.sw-log-panel { padding: 0; overflow: hidden; }
+
+.sw-fieldset {
+    padding: 1.5rem 2rem;
+    margin: 0;
+    border: 0;
+}
+.sw-fieldset + .sw-fieldset { border-top: 1px solid var(--sw-line); }
+.sw-fieldset legend {
+    float: left;
+    width: 100%;
+    margin-bottom: 1rem;
+    font-family: "Gabarito", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+.sw-fieldset legend + * { clear: left; }
+.sw-optional {
+    font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+    font-weight: 400;
+    font-size: .875rem;
+    color: var(--sw-muted);
+    margin-left: .25rem;
+}
+
+/* Type picker: radios styled as the same colored chips used on the Overview */
+.sw-type-picker {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .6rem;
+    margin-bottom: 1.25rem;
+}
+.sw-type-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+.sw-type-option label {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    height: 100%;
+    padding: .75rem 1rem;
+    border: 2px solid var(--sw-line);
+    border-radius: 1rem;
+    background: var(--sw-surface);
+    font-weight: 700;
+    cursor: pointer;
+}
+.sw-type-option label::before {
+    content: "";
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 2px solid var(--sw-line);
+}
+.sw-type-option label:hover { border-color: var(--sw-muted); }
+.sw-type-option input:focus-visible + label {
+    outline: 3px solid var(--sw-pine);
+    outline-offset: 2px;
+}
+.sw-type-option.is-waste { --chip-bg: var(--sw-chip-waste-bg); --chip-fg: var(--sw-chip-waste-fg); }
+.sw-type-option.is-discrepancy { --chip-bg: var(--sw-chip-discrepancy-bg); --chip-fg: var(--sw-chip-discrepancy-fg); }
+.sw-type-option.is-unaccounted { --chip-bg: var(--sw-chip-unaccounted-bg); --chip-fg: var(--sw-chip-unaccounted-fg); }
+.sw-type-option input:checked + label {
+    background: var(--chip-bg);
+    border-color: var(--chip-fg);
+    color: var(--chip-fg);
+}
+.sw-type-option input:checked + label::before {
+    border-color: var(--chip-fg);
+    background: var(--chip-fg);
+    box-shadow: inset 0 0 0 3px var(--chip-bg);
+}
+
+.sw-money-input { position: relative; }
+.sw-money-input span {
+    position: absolute;
+    left: .95rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--sw-muted);
+    font-weight: 700;
+    pointer-events: none;
+}
+.sw-money-input .form-control { padding-left: 2rem; }
+
+/* Photo picker: native input hidden, label is the target */
+.sw-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+.sw-file {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border: 2px dashed var(--sw-line);
+    border-radius: 1rem;
+    cursor: pointer;
+    color: var(--sw-ink);
+}
+.sw-file svg { color: var(--sw-pine); flex: none; }
+.sw-file strong { word-break: break-all; }
+.sw-file:hover { border-color: var(--sw-pine); }
+.sw-file-input:focus-visible + .sw-file {
+    outline: 3px solid var(--sw-pine);
+    outline-offset: 2px;
+}
+
+/* Footer: live total, then the confirmation once saved */
+.sw-form-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 2rem;
+    background: var(--sw-surface-2);
+}
+.sw-form-footer-status { flex: 1 1 16rem; min-width: 0; }
+.sw-form-total {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin: 0;
+}
+.sw-form-total .sw-sticker { font-size: 1.5rem; padding: .25rem .8rem; }
+.sw-saved {
+    display: flex;
+    align-items: flex-start;
+    gap: .6rem;
+    margin: 0;
+}
+.sw-saved svg { flex: none; margin-top: .15rem; color: var(--sw-pine); }
+
+/* The edit modal has no panel padding of its own */
+.modal .sw-fieldset { padding-left: 0; padding-right: 0; }
+.modal .sw-form-footer { margin: 0 -1.5rem -1.5rem; padding: 1rem 1.5rem; }
+
+@media (max-width: 575.98px) {
+    .sw-fieldset { padding: 1.25rem; }
+    .sw-form-footer { padding: 1rem 1.25rem; }
+    .sw-form-footer .btn { width: 100%; }
+    .sw-type-picker { grid-template-columns: minmax(0, 1fr); }
+}
+
 .sw-form-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
