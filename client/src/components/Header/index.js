@@ -40,7 +40,7 @@ const Header = () => {
             </Link>
             <nav className="sw-nav" aria-label="Main">
                 <NavLink to="/feed">Overview</NavLink>
-                <NavLink to="/profile">Log a loss</NavLink>
+                <NavLink to="/logloss">Log a loss</NavLink>
                 {loggedIn && (
                     <button type="button" className="sw-nav-logout" onClick={handleLogout} aria-label="Log out">
                         <FiLogOut size="18" aria-hidden="true" />

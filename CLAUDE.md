@@ -22,7 +22,7 @@ The server loads env vars from `server/config/.env` (not the root): `PORT` (must
 
 ## Architecture
 
-**Client ↔ server wiring:** `client/package.json` sets `"proxy": "http://localhost:8000/"`, so the client calls the API with relative `fetch` paths (`/profile`, `/feed`, `/lossEvent/...`) and doesn't set any CORS/base URL config. When you add a route, the client path and the Express mount path have to match exactly. Client routes (`client/src/App.js`, react-router v6) share some paths with API routes (e.g. `/profile`, `/feed`, `/post/:id`). Requests from the React page reach the API through the proxy.
+**Client ↔ server wiring:** `client/package.json` sets `"proxy": "http://localhost:8000/"`, so the client calls the API with relative `fetch` paths (`/profile`, `/feed`, `/lossEvent/...`) and doesn't set any CORS/base URL config. When you add a route, the client path and the Express mount path have to match exactly. Client routes (`client/src/App.js`, react-router v6) share some paths with API routes (e.g. `/feed`, `/post/:id`; the Log a loss page is at `/logloss` but still loads its data from the `/profile` API). Requests from the React page reach the API through the proxy.
 
 **Server (`server.js` + `server/`)**: MVC layout with Express.
 - Routes are mounted at `/` (`routes/main.js`: auth, profile, feed), `/post` (`routes/posts.js`), and `/lossEvent` (`routes/lossEvents.js`).

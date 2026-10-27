@@ -31,7 +31,7 @@ const Login = () => {
                 }
             })
                 .then(res => res.json())
-                .then(res => navigate('/profile'))
+                .then(res => navigate('/logloss'))
                 .catch(err => console.error(err))
         }
     }

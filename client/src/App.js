@@ -4,7 +4,7 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import Profile from './pages/Profile'
+import LogLoss from './pages/LogLoss'
 import Feed from './pages/Feed'
 import PostPage from './pages/PostPage'
 // import [COMPONENT_NAME] from './components/[COMPONENT_NAME]'
@@ -19,7 +19,7 @@ function App() {
                 <Route exact path="/" element={<Home />}/>
                 <Route path="/login" element={<Login />}/>
                 <Route path="/signup" element={<Signup />}/>
-                <Route path="/profile" element={<Profile />}/>
+                <Route path="/logloss" element={<LogLoss />}/>
                 <Route path="/feed" element={<Feed />}/>
                 <Route path="/post/:id" element={<PostPage />}/>
             </Routes>

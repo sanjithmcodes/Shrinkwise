@@ -616,8 +616,8 @@ a:hover { color: var(--sw-pine-hover); }
     text-align: center;
 }
 
-/* ---------- Profile ---------- */
-.sw-profile {
+/* ---------- Log a loss page ---------- */
+.sw-logloss {
     max-width: 44rem;
     margin: 0 auto;
 }

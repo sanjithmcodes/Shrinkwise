@@ -86,7 +86,7 @@ const Feed = () => {
                 <div className="sw-empty">
                     <h2>No losses logged for this period</h2>
                     <p className="sw-muted">When something goes to waste or goes missing, log it so it shows up here.</p>
-                    <Link to="/profile" className="btn btn-primary">Log a loss</Link>
+                    <Link to="/logloss" className="btn btn-primary">Log a loss</Link>
                 </div>
             ) : (
                 <>

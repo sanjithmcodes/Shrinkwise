@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {useNavigate} from 'react-router-dom'
 import LossEventForm from '../../components/LossEventForm'
 
-const Profile = () => {
+const LogLoss = () => {
     const navigate = useNavigate()
 
 
@@ -30,7 +30,7 @@ const Profile = () => {
     }else{
         return (
             <main className="container sw-page">
-                <div className="sw-profile">
+                <div className="sw-logloss">
                     <div className="sw-page-head">
                         <h1>Log a loss</h1>
                         <div className="sw-user">
@@ -51,4 +51,4 @@ const Profile = () => {
     }
 }
 
-export default Profile
+export default LogLoss
