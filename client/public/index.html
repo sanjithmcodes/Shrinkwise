@@ -7,11 +7,16 @@
         <meta name="color-scheme" content="light dark" />
         <title>Shrinkwise</title>
         <script>
-            // Follow the OS light/dark setting (Bootstrap 5.3 reads data-bs-theme)
+            // Use the saved theme if the user picked one in the header, otherwise follow the OS
+            // (Bootstrap 5.3 reads data-bs-theme)
             (function () {
                 var query = window.matchMedia('(prefers-color-scheme: dark)')
+                function saved() {
+                    try { return localStorage.getItem('sw-theme') } catch (e) { return null }
+                }
                 function apply() {
-                    document.documentElement.setAttribute('data-bs-theme', query.matches ? 'dark' : 'light')
+                    var theme = saved() || (query.matches ? 'dark' : 'light')
+                    document.documentElement.setAttribute('data-bs-theme', theme)
                 }
                 apply()
                 query.addEventListener('change', apply)

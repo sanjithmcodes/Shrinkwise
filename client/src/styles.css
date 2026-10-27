@@ -1,5 +1,6 @@
 /* Shrinkwise theme: Bootstrap 5.3 retuned to a warm, friendly shop palette.
-   Light/dark follows the OS via data-bs-theme (set in public/index.html). */
+   Light/dark follows the OS via data-bs-theme (set in public/index.html)
+   unless the user picks one with the header toggle. */
 
 :root,
 [data-bs-theme="light"] {
@@ -262,6 +263,15 @@ a:hover { color: var(--sw-pine-hover); }
     background: var(--sw-ink);
     color: var(--sw-paper);
 }
+.sw-nav .sw-nav-theme {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: .25rem;
+    padding: .45rem;
+    color: var(--sw-muted);
+}
+.sw-nav .sw-nav-theme:hover { color: var(--sw-ink); }
 .sw-nav .sw-nav-logout {
     display: inline-flex;
     align-items: center;
@@ -282,6 +292,7 @@ a:hover { color: var(--sw-pine-hover); }
     .sw-nav { gap: 0; }
     .sw-nav a,
     .sw-nav button { padding: .4rem .55rem; font-size: .95rem; }
+    .sw-nav .sw-nav-theme { margin-left: 0; padding: .4rem; }
     .sw-nav .sw-nav-logout { margin-left: .25rem; padding: .4rem; }
     .sw-nav-logout-text { display: none; }
 }
