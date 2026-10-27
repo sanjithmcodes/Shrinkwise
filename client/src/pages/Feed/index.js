@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FiImage } from 'react-icons/fi'
 import { TYPE_LABELS, CATEGORY_LABELS, formatMoney, formatDate, lossTotal } from '../../lossFormat'
 import DeleteButton from '../../components/DeleteButton';
@@ -17,6 +17,7 @@ function Thumb({ lossEvent }) {
 const Feed = () => {
     const [posts, setPosts] = useState([])
     const [period, setPeriod] = useState('All Time')
+    const navigate = useNavigate()
     
 
     useEffect(() => {
@@ -27,6 +28,14 @@ const Feed = () => {
         }
         fetchPosts();
     }, []) 
+
+    //clicking anywhere on a row/card opens the loss, except its buttons and links.
+    //Modal clicks bubble here through the React portal, so ignore anything outside the row's DOM.
+    function openLoss(e, id) {
+        if (!e.currentTarget.contains(e.target)) return
+        if (e.target.closest('button, a, input, select, textarea, label')) return
+        navigate(`/post/${id}`)
+    }
 
     function selectOption(option) {
         setPeriod(option)
@@ -100,11 +109,11 @@ const Feed = () => {
                                 </thead>
                                 <tbody>
                                     {filteredPosts.map(e => (
-                                        <tr key={e._id}>
+                                        <tr key={e._id} className="sw-row" onClick={ev => openLoss(ev, e._id)}>
                                             <td><Thumb lossEvent={e} /></td>
                                             <td className="text-nowrap">{formatDate(e.date)}</td>
                                             <td><span className={`sw-chip is-${e.type}`}>{TYPE_LABELS[e.type] || e.type}</span></td>
-                                            <td>{CATEGORY_LABELS[e.category] || e.category}</td>
+                                            <td><Link className="sw-row-link" to={`/post/${e._id}`}>{CATEGORY_LABELS[e.category] || e.category}</Link></td>
                                             <td className="sw-desc">{e.description || '–'}</td>
                                             <td className="is-num sw-num">{e.quantity || 1}</td>
                                             <td className="is-num sw-num">{formatMoney(e.cost)}</td>
@@ -123,10 +132,10 @@ const Feed = () => {
                     {/* Mobile: cards */}
                     <ul className="sw-cards d-md-none">
                         {filteredPosts.map(e => (
-                            <li key={e._id} className="sw-card">
+                            <li key={e._id} className="sw-card" onClick={ev => openLoss(ev, e._id)}>
                                 <Thumb lossEvent={e} />
                                 <div>
-                                    <strong className="d-block">{CATEGORY_LABELS[e.category] || e.category}</strong>
+                                    <strong className="d-block"><Link className="sw-row-link" to={`/post/${e._id}`}>{CATEGORY_LABELS[e.category] || e.category}</Link></strong>
                                     <span className={`sw-chip is-${e.type} my-1`}>{TYPE_LABELS[e.type] || e.type}</span>
                                     {e.description && <p className="mb-1">{e.description}</p>}
                                     <div className="sw-card-meta sw-num">

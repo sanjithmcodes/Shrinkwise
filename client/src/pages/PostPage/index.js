@@ -25,7 +25,7 @@ export default function PostPage() {
             await fetch(`/lossEvent/deleteLossEvent/${id}?_method=DELETE`, {
             'method': "POST",
             })
-            navigate('/profile')
+            navigate('/feed')
             console.log('Loss event deleted')
         }
         catch(err) {
@@ -63,7 +63,6 @@ export default function PostPage() {
                     </dl>
                     <div className="d-flex flex-wrap gap-2">
                         <Link className="btn btn-primary" to="/feed">Back to overview</Link>
-                        <Link className="btn btn-outline-primary" to="/profile">Back to profile</Link>
                         <form onSubmit={handleDelete}>
                             <button className="btn btn-link sw-danger-link" type="submit">Delete loss</button>
                         </form>
