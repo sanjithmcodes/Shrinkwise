@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { TYPE_LABELS, CATEGORY_LABELS, formatMoney, formatDate, lossTotal } from "../../lossFormat";
+import EditButton from "../../components/EditButton";
+import DeleteButton from "../../components/DeleteButton";
 
 export default function PostPage() {
     let { id } = useParams();
@@ -19,19 +21,15 @@ export default function PostPage() {
     }, [])
 
     const navigate = useNavigate()
-    async function handleDelete(e){
-        e.preventDefault()
-        try{
-            await fetch(`/lossEvent/deleteLossEvent/${id}?_method=DELETE`, {
-            'method': "POST",
-            })
+    //EditButton/DeleteButton update a list via setPosts(prev => ...). Run their updater on a
+    //one-item list: an edit swaps in the updated loss, a delete empties it, so go back to the overview.
+    function setPosts(updater) {
+        const [next] = updater([post])
+        if (next) {
+            setPost(next)
+        } else {
             navigate('/feed')
-            console.log('Loss event deleted')
         }
-        catch(err) {
-            console.log(err)
-        }
-        
     }
 
     return (
@@ -44,9 +42,15 @@ export default function PostPage() {
                 </div>
                 <div>
                     {post.cost !== undefined && (
-                        <div className="sw-tag">
-                            <span className="sw-tag-label">{CATEGORY_LABELS[post.category] || post.category}</span>
-                            <span className="sw-tag-amount">{formatMoney(lossTotal(post))}</span>
+                        <div className="sw-detail-head">
+                            <div className="sw-tag">
+                                <span className="sw-tag-label">{CATEGORY_LABELS[post.category] || post.category}</span>
+                                <span className="sw-tag-amount">{formatMoney(lossTotal(post))}</span>
+                            </div>
+                            <div className="sw-detail-actions">
+                                <EditButton lossEvent={post} setPosts={setPosts}/>
+                                <DeleteButton ID={post._id} setPosts={setPosts}/>
+                            </div>
                         </div>
                     )}
                     <dl>
@@ -61,12 +65,7 @@ export default function PostPage() {
                             <dd>{post.description}</dd>
                         </>}
                     </dl>
-                    <div className="d-flex flex-wrap gap-2">
-                        <Link className="btn btn-primary" to="/feed">Back to overview</Link>
-                        <form onSubmit={handleDelete}>
-                            <button className="btn btn-link sw-danger-link" type="submit">Delete loss</button>
-                        </form>
-                    </div>
+                    <Link className="btn btn-primary" to="/feed">Back to overview</Link>
                 </div>
             </div>
         </main>
