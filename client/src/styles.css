@@ -16,6 +16,7 @@
     --sw-on-marigold: #2A2238;
     --sw-raspberry: #C2364F;
     --sw-raspberry-hover: #A32A40;
+    --sw-gold: #A87400; /* marigold deepened enough to read as an icon on light surfaces */
     --sw-focus: rgba(47, 107, 94, .35);
 
     --sw-chip-waste-bg: #DDEFD9;
@@ -40,6 +41,7 @@
     --sw-on-marigold: #2A2238;
     --sw-raspberry: #F07A8E;
     --sw-raspberry-hover: #F59AA9;
+    --sw-gold: #FFC94A;
     --sw-focus: rgba(108, 196, 174, .4);
 
     --sw-chip-waste-bg: #29402A;
@@ -164,6 +166,7 @@ a:hover { color: var(--sw-pine-hover); }
 }
 .sw-icon-btn:hover { background: var(--sw-surface-2); color: var(--sw-ink); }
 .sw-icon-btn.is-danger:hover { color: var(--sw-raspberry); }
+.sw-icon-btn.is-edit:hover { color: var(--sw-gold); }
 
 /* ---------- Forms ---------- */
 .form-label {

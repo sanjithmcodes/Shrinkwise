@@ -17,7 +17,7 @@ function EditModal(props) {
 
   return (
     <>
-      <button className='sw-icon-btn' onClick={handleShow} aria-label='Edit loss' title='Edit loss'>
+      <button className='sw-icon-btn is-edit' onClick={handleShow} aria-label='Edit loss' title='Edit loss'>
         <FiEdit2 size='20' />
       </button>
 
