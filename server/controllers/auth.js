@@ -11,6 +11,14 @@ exports.getLogin = (req, res) => {
     });
 };
 
+// Lets the client check whether the session is logged in
+exports.getUser = (req, res) => {
+    if (!req.user) {
+        return res.send({ user: null });
+    }
+    res.send({ user: { userName: req.user.userName, email: req.user.email } });
+};
+
 exports.postLogin = (req, res, next) => {
     const validationErrors = [];
     if (!validator.isEmail(req.body.email))

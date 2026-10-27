@@ -1,7 +1,27 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import { Link, Navigate } from 'react-router-dom'
 
 const Home = () => {
+    //null while checking the session, then true/false
+    const [loggedIn, setLoggedIn] = useState(null)
+
+    useEffect(() => {
+        async function fetchUser() {
+            try {
+                const res = await fetch('/user')
+                const response = await res.json()
+                setLoggedIn(Boolean(response.user))
+            } catch (err) {
+                console.error(err)
+                setLoggedIn(false)
+            }
+        }
+        fetchUser()
+    }, [])
+
+    if (loggedIn === null) return null
+    if (loggedIn) return <Navigate to="/feed" replace />
+
     return (
         <main className="container sw-hero">
             <div>
